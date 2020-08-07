@@ -46,7 +46,7 @@ public class RoomManager : MonoBehaviour
 			Debug.Log(JSON.Parse(data.ToString()).ToString());
 		});
 
-		socket.On("Matched", (data) =>
+		socket.On("Matched", (data) =>		
 		{
 			Debug.Log(JSON.Parse(data.ToString()).ToString());
 		});
@@ -76,7 +76,7 @@ public class RoomManager : MonoBehaviour
 		Hashtable send_data = new Hashtable();
 		send_data.Add("nickname", auto_username.text);
 
-		socket.Emit("Mathing", JsonConvert.SerializeObject(send_data));
+		socket.Emit("Matching", JsonConvert.SerializeObject(send_data));
 		Debug.Log(JsonConvert.SerializeObject(send_data));
 	}
 }
