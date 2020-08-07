@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class InGameManager : MonoBehaviour
 {
+    public GameObject enemy;
+    
     void Start()
     {
         

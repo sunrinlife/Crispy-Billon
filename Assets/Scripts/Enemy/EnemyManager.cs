@@ -1,18 +1,21 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
+    public float HP;
 
-    private GameObject target;
     private float speed;
+    private GameObject target;
     
     void Start()
     {
-        target = GameObject.Find("player");
+        HP = 100;
         speed = 1;
+        target = GameObject.Find("player");
     }
 
     void Update()
@@ -28,5 +31,13 @@ public class EnemyManager : MonoBehaviour
         // 타겟 방향으로 회전함
         //float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         //transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            HP -= 10;
+        }
     }
 }
