@@ -19,7 +19,7 @@ public class RoomManager : MonoBehaviour
 
 	private void Start()
 	{
-		socket = IO.Socket("http://192.168.0.219:51235/");
+		socket = IO.Socket("https://speed.run.goorm.io/");
 
 		socket.On(Socket.EVENT_CONNECT, () =>
 		{
