@@ -109,6 +109,17 @@ public class RoomManager : MonoBehaviour
 				first_start = false;
 			}
 
+			if (receive_data["alarm"] != null)
+			{
+				if (receive_data["alarm"]["spam"])
+				{
+					GameObject.Find("GameManager").GetComponent<IngameManager>().SpawnSpam();
+				}
+				else
+				{
+					GameObject.Find("GameManager").GetComponent<IngameManager>().SpawnAlram();
+				}
+			}
 
 			if (GameObject.Find("GameManager").GetComponent<IngameManager>().player1.GetComponent<Player>().master == true)
 			{
@@ -132,7 +143,7 @@ public class RoomManager : MonoBehaviour
 					Hashtable send_data = new Hashtable();
 					send_data.Add("room_id", GameObject.Find("GameManager").GetComponent<IngameManager>().room_id);
 					send_data.Add("player", players);
-					if (Time.time - time >= 1)
+					if (Time.time - time >= 0.5f)
 					{
 						send_data.Add("alarm", alarm);
 						time = Time.time;
