@@ -10,4 +10,9 @@ public class Alarm : MonoBehaviour
 	{
 		transform.position += new Vector3(0, move_speed, 0);
 	}
+
+	public void Dis() 
+	{
+		Destroy(gameObject);
+	}
 }
