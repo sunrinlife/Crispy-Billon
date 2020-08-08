@@ -15,7 +15,7 @@ public class RoomManager : MonoBehaviour
 {
 	private Socket socket;
 
-	string my_nickname = "";
+	public string my_nickname = "";
 
 	public InputField join_room_id;
 	public InputField join_username;
@@ -143,7 +143,7 @@ public class RoomManager : MonoBehaviour
 					Hashtable send_data = new Hashtable();
 					send_data.Add("room_id", GameObject.Find("GameManager").GetComponent<IngameManager>().room_id);
 					send_data.Add("player", players);
-					if (Time.time - time >= 0.5f)
+					if (Time.time - time >= 0.8f)
 					{
 						send_data.Add("alarm", alarm);
 						time = Time.time;
@@ -151,6 +151,12 @@ public class RoomManager : MonoBehaviour
 
 
 					socket.Emit("Get", JsonConvert.SerializeObject(send_data));
+
+					if(receive_data["player"][0]["missed"] || receive_data["player"][1]["missed"])
+					{
+						started = false;
+
+					}
 				}
 				catch(Exception e)
 				{

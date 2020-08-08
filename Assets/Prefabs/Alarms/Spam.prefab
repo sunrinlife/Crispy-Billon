@@ -117,7 +117,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1571572783610743613}
           m_TargetAssemblyTypeName: Alarm, Assembly-CSharp
-          m_MethodName: Dis
+          m_MethodName: Cli
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
