@@ -26,9 +26,12 @@ public class RoomManager : MonoBehaviour
 
 	public GameObject matching;
 
+	public Text create_username_text;
+
 	private bool startgame = false;
 	private bool first_start = false;
 	private bool started = false;
+	private bool roomcreated = false;
 
 	JSONNode receive_data;
 
@@ -45,7 +48,9 @@ public class RoomManager : MonoBehaviour
 
 		socket.On("CreateR", (data) =>
 		{
-			Debug.Log(JSON.Parse(data.ToString()).ToString());
+			Debug.Log(JSON.Parse(data.ToString())["room_id"]);
+			receive_data = JSON.Parse(data.ToString());
+			roomcreated = true;
 		});
 
 		socket.On("CreateFail", (data) =>
@@ -100,36 +105,46 @@ public class RoomManager : MonoBehaviour
 				GameObject.Find("GameManager").GetComponent<IngameManager>().player2.GetComponent<Player>().nickname = receive_data["player"][1]["nickname"];
 				GameObject.Find("GameManager").GetComponent<IngameManager>().player1.GetComponent<Player>().missed = receive_data["player"][0]["missed"];
 				GameObject.Find("GameManager").GetComponent<IngameManager>().player2.GetComponent<Player>().missed = receive_data["player"][1]["missed"];
+				GameObject.Find("GameManager").GetComponent<IngameManager>().room_id = receive_data["room_id"];
 				first_start = false;
 			}
 
 
 			if (GameObject.Find("GameManager").GetComponent<IngameManager>().player1.GetComponent<Player>().master == true)
 			{
-				Hashtable player1 = new Hashtable();
-				player1.Add("name", GameObject.Find("GameManager").GetComponent<IngameManager>().player1.GetComponent<Player>().nickname);
-				player1.Add("missed", GameObject.Find("GameManager").GetComponent<IngameManager>().player1.GetComponent<Player>().missed);
-				Hashtable player2 = new Hashtable();
-				player2.Add("name", GameObject.Find("GameManager").GetComponent<IngameManager>().player2.GetComponent<Player>().nickname);
-				player2.Add("missed", GameObject.Find("GameManager").GetComponent<IngameManager>().player2.GetComponent<Player>().missed);
+				try
+				{
+					Hashtable player1 = new Hashtable();
+					player1.Add("name", GameObject.Find("GameManager").GetComponent<IngameManager>().player1.GetComponent<Player>().nickname);
+					player1.Add("missed", GameObject.Find("GameManager").GetComponent<IngameManager>().player1.GetComponent<Player>().missed);
+					Hashtable player2 = new Hashtable();
+					player2.Add("name", GameObject.Find("GameManager").GetComponent<IngameManager>().player2.GetComponent<Player>().nickname);
+					player2.Add("missed", GameObject.Find("GameManager").GetComponent<IngameManager>().player2.GetComponent<Player>().missed);
 
-				List<Hashtable> players_list = new List<Hashtable>(){ player1, player2 };
+					List<Hashtable> players_list = new List<Hashtable>() { player1, player2 };
 
-				Hashtable players = new Hashtable();
-				players.Add("players", players_list);
+					Hashtable players = new Hashtable();
+					players.Add("players", players_list);
 
-				Hashtable alarm = new Hashtable();
-				alarm.Add("spam", UnityEngine.Random.Range(0, 2) == 0 ? true : false);
-				
-				Hashtable send_data = new Hashtable();
-				send_data.Add("player", players);
-				if (Time.time - time >= 1) {
-					send_data.Add("alarm", alarm);
-					time = Time.time;
+					Hashtable alarm = new Hashtable();
+					alarm.Add("spam", UnityEngine.Random.Range(0, 2) == 0 ? true : false);
+
+					Hashtable send_data = new Hashtable();
+					send_data.Add("room_id", GameObject.Find("GameManager").GetComponent<IngameManager>().room_id);
+					send_data.Add("player", players);
+					if (Time.time - time >= 1)
+					{
+						send_data.Add("alarm", alarm);
+						time = Time.time;
+					}
+
+
+					socket.Emit("Get", JsonConvert.SerializeObject(send_data));
 				}
-
-
-				socket.Emit("Get", JsonConvert.SerializeObject(send_data));
+				catch(Exception e)
+				{
+					Debug.Log(e);
+				}
 			}
 		}
 		if (startgame)
@@ -138,6 +153,11 @@ public class RoomManager : MonoBehaviour
 			startgame = false;
 			first_start = true;
 			started = true;
+		}
+		if (roomcreated)
+		{
+				create_username_text.text = receive_data["room_id"];
+				roomcreated = false;
 		}
 	}
 

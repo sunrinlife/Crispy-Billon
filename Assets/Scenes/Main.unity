@@ -6062,6 +6062,7 @@ MonoBehaviour:
   create_username: {fileID: 1471455175}
   auto_username: {fileID: 838936658}
   matching: {fileID: 133890014}
+  create_username_text: {fileID: 506362427}
 --- !u!4 &1257554002
 Transform:
   m_ObjectHideFlags: 0

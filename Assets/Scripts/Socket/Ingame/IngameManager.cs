@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class IngameManager : MonoBehaviour
 {
+	public string room_id = "";
+	
 	public GameObject player1;
 	public GameObject player2;
 }
