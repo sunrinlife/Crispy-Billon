@@ -33,7 +33,7 @@ public class MainManager : MonoBehaviour
 	{
 		GameObject tmp = Instantiate(msgbox);
 
-		tmp.transform.parent = GameObject.Find("Content").transform;
+		tmp.transform.SetParent(GameObject.Find("Content").transform);
 		tmp.transform.localScale = new Vector3(1, 1, 1);
 		tmp.transform.GetChild(0).GetComponent<Text>().text = "게임을 시작합니다!";
 
